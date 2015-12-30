@@ -7,6 +7,7 @@ Your application is only one Bash command away from your beta-testers :
 
 
 1) ./importIPA.sh *IPAFilePath* *InstallationSubDir* *DeployURL*
+
 This command will process your IPA located at *IPAFilePath* and copy the result into the local sub-directory *InstallationSubDir*, corresponding to the URL https://*DeployURL*/*InstallationSubDir*/.
 
 2) Copy the URL contained in the output of the previous command and paste it into a browser.
