@@ -10,7 +10,7 @@
 #http://help.apple.com/deployment/ios/#/apda0e3426d7
 #http://blog.octo.com/en/automating-over-the-air-deployment-for-iphone/
 
-[[ $# -lt 2 ]] && echo "Ce script attend 2 paramètres : le chemin vers un fichier IPA et le chemin du système de fichier correspondant à la racine du site." && exit 1;
+[[ $# -lt 3 ]] && echo "Ce script attend 3 paramètres : le chemin vers un fichier IPA, le dossier local dans lequel déposer le produit déployable et l'URL correspondant à la racine du site de déploiement." && exit 1;
 
 rm -rf tmp/
 mkdir tmp
@@ -19,6 +19,17 @@ IPAFileName=`basename "$IPA"`
 IPASubDirName=`basename "$IPA" .ipa | tr A-Z a-z`
 IPASubDirName=`basename "$IPA" .ipa`
 RootDir=`basename "$2"`
+
+#2015-12-30 : on prend en compte n'importe quelle URL de dépôt en nettoyant au mieux le paramètre passé sur la CLI
+T=$3
+#trim
+T=`echo $T | sed 's/^[ \t]*//;s/[ \t]*$//'`
+#Pas besoin du préfixe
+T=`echo $T | sed 's/https\?:\/\///'`
+#Virer le / final éventuel
+T=`echo $T | sed 's/\/*$//'`
+RootURL="https://$T"
+
 echo "Traitement de $IPA..."
 sleep 1
 unzip -q "$IPA" -d tmp/ "Payload/$IPASubDirName.app/Info.plist" "Payload/$IPASubDirName.app/embedded.mobileprovision"
@@ -59,10 +70,10 @@ while [[ -d $RootDir/$RelativeDir ]]; do
 done
 
 AppDir=$RootDir/$RelativeDir
-BUNDLE_URL="https://apps.acemod.fr/$RootDir/$RelativeDir/$IPAFileName"
-MANIFEST_PLIST_URL="https://apps.acemod.fr/$RootDir/$RelativeDir/manifest.plist"
-TestersURL="https://apps.acemod.fr/$RootDir/$RelativeDir/"
-APPICON_URL="https://apps.acemod.fr/$RootDir/$RelativeDir/$ICON_FILENAME"
+BUNDLE_URL="$RootURL/$RootDir/$RelativeDir/$IPAFileName"
+MANIFEST_PLIST_URL="$RootURL/$RootDir/$RelativeDir/manifest.plist"
+TestersURL="$RootURL/$RootDir/$RelativeDir/"
+APPICON_URL="$RootURL/$RootDir/$RelativeDir/$ICON_FILENAME"
 
 #On poursuit en analysant le fichier embedded.mobileprovision pour avoir les dernières infos utiles (nom de l'équipe, les UUIDs pouvant installer l'IPA etc)
 #Pour analyser ce fichier (embedded.mobileprovision) il faut tout d'abord le nettoyer : l'entête et le pied de fichier sont en binaire et n'ont rien à voir avec le document XML constituant la PLIST qui nous intéresse.
