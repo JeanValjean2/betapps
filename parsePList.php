@@ -1,4 +1,4 @@
-<?
+<?php
 //Parseur de fichiers .plist, permettant notamment d'extraire les valeurs de type "array" et "dict" d'un fichier embedded.mobileprovision
 
 function	getXMLArray(&$o)		{
