@@ -71,6 +71,7 @@ done
 
 AppDir=$RootDir/$RelativeDir
 BUNDLE_URL="$RootURL/$RootDir/$RelativeDir/$IPAFileName"
+BUNDLE_URL=`echo $BUNDLE_URL | sed 's/ /%20/g'`
 MANIFEST_PLIST_URL="$RootURL/$RootDir/$RelativeDir/manifest.plist"
 TestersURL="$RootURL/$RootDir/$RelativeDir/"
 APPICON_URL="$RootURL/$RootDir/$RelativeDir/$ICON_FILENAME"
