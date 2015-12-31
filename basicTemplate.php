@@ -1,4 +1,4 @@
-<?
+<?php
 //Moteur simplifié de "template" afin de fournir un service que Bash a du mal à faire de manière élégante.
 
 function	isSerialized(&$val)		{		return substr($val, 0, 4) == "a:1:";		}
